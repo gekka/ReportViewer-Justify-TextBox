@@ -17,7 +17,7 @@ namespace WebApplication6
             //Response.BinaryWrite(bytes);
             //Response.End();
 
-            //// pngf形式で出力を行う
+            //// png形式で出力を行う
             //Byte[] bytes = ReportViewer1.LocalReport.Render("image", "<DeviceInfo><OutputFormat>PNG</OutputFormat></DeviceInfo>");
             //Response.ContentType = "image/png";
             //Response.BinaryWrite(bytes);
@@ -38,6 +38,23 @@ namespace WebApplication6
                 Microsoft.Reporting.WebForms.ReportParameter rp = new Microsoft.Reporting.WebForms.ReportParameter(rpi.Name, s);
                 list.Add(rp);
             }
+
+            foreach (string name in this.ReportViewer1.LocalReport.GetDataSourceNames())
+            {
+                DataSet1.DataTable1DataTable dt = new DataSet1.DataTable1DataTable();
+                var row = dt.NewDataTable1Row();
+                row.DataColumn1 = s;
+                dt.Rows.Add(row);
+
+                row = dt.NewDataTable1Row();
+                row.DataColumn1 = ToJustifyText(s);
+                dt.Rows.Add(row);
+
+                reportViewer1.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource(name, (System.Collections.IEnumerable)dt));
+
+            }
+
+            reportViewer1.DataBind();
             reportViewer1.LocalReport.SetParameters(list);
         }
 
